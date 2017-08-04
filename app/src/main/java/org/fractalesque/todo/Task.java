@@ -1,11 +1,20 @@
 package org.fractalesque.todo;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable {
     private String title;
     private String description;
+    private int id;
+
     Task(String t, String d) {
-        this.title = t;
-        this.description = d;
+        title = t;
+        description = d;
+    }
+    Task(String t, String d, int i) {
+        title = t;
+        description = d;
+        id = i;
     }
 
     public String getTitle() {
@@ -16,11 +25,16 @@ public class Task {
         return description;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", id=" + id +
                 '}';
     }
 }

@@ -1,8 +1,6 @@
 package org.fractalesque.todo;
 
-import android.content.ContentUris;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,17 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+
 
 public class Listing extends AppCompatActivity {
 
@@ -34,8 +27,17 @@ public class Listing extends AppCompatActivity {
         Mapper mapper = new Mapper(this);
         Task[] tasks = mapper.getTasks();
         ListView listview = (ListView) findViewById(R.id.listview);
-        ArrayAdapter<Task> adapter = new MyAdapter(this, android.R.layout.simple_list_item_1, tasks);
+        final ArrayAdapter<Task> adapter = new MyAdapter(this, android.R.layout.simple_list_item_1, tasks);
         listview.setAdapter(adapter);
+        final Intent editIntent = new Intent(this, Editing.class);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Task thisTask = adapter.getItem(position);
+                editIntent.putExtra("item", thisTask);
+                startActivity(editIntent);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final Intent intent = new Intent(this, Editing.class);
