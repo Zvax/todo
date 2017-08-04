@@ -14,6 +14,14 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 public class Listing extends AppCompatActivity {
 
     @Override
@@ -26,7 +34,7 @@ public class Listing extends AppCompatActivity {
         Mapper mapper = new Mapper(this);
         Task[] tasks = mapper.getTasks();
         ListView listview = (ListView) findViewById(R.id.listview);
-        ArrayAdapter<Task> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasks);
+        ArrayAdapter<Task> adapter = new MyAdapter(this, android.R.layout.simple_list_item_1, tasks);
         listview.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -60,4 +68,17 @@ public class Listing extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private class MyAdapter extends ArrayAdapter<Task> {
+
+        MyAdapter(Context context, int textViewRessourceId, Task[] elems) {
+            super(context, textViewRessourceId, elems);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return super.getView(position, convertView, parent);
+        }
+    }
+
 }
