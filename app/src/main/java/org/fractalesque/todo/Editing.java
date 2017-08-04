@@ -17,8 +17,8 @@ public class Editing extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final EditText titleInput = (EditText) findViewById(R.id.editText);
-        final EditText descriptionInput = (EditText) findViewById(R.id.editText2);
+        final EditText titleInput = (EditText) findViewById(R.id.titleInput);
+        final EditText descriptionInput = (EditText) findViewById(R.id.descriptionInput);
 
         boolean tempEditMode = false;
 
