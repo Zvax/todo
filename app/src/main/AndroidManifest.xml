@@ -28,6 +28,14 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="org.fractalesque.todo.Listing"/>
         </activity>
+        <activity
+                android:name=".Settings"
+                android:label="@string/title_activity_form"
+                android:parentActivityName=".Listing">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="org.fractalesque.todo.Listing"/>
+        </activity>
     </application>
 
 </manifest>
