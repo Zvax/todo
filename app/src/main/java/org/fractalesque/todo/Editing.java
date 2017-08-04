@@ -31,10 +31,11 @@ public class Editing extends AppCompatActivity {
 
         final boolean editMode = tempEditMode;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton saveButton = (FloatingActionButton) findViewById(R.id.action_save);
+        FloatingActionButton deleteButton = (FloatingActionButton) findViewById(R.id.action_delete);
         final Intent navigate = new Intent(this, Listing.class);
         final Mapper mapper = new Mapper(this);
-        fab.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String title = titleInput.getText().toString();
@@ -47,6 +48,15 @@ public class Editing extends AppCompatActivity {
                 startActivity(navigate);
             }
         });
+        if (editMode) {
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mapper.delete(currentTask);
+                    startActivity(navigate);
+                }
+            });
+        }
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

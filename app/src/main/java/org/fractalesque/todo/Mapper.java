@@ -34,6 +34,11 @@ public class Mapper extends SQLiteOpenHelper {
         db.execSQL(DICTIONARY_TABLE_CREATE);
     }
 
+    public void delete(Task task) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(DICTIONARY_TABLE_NAME, "id="+task.getId(), null);
+    }
+
     public void update(Task task) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -48,6 +53,7 @@ public class Mapper extends SQLiteOpenHelper {
         Cursor maxIdCursor = read.query(DICTIONARY_TABLE_NAME, selectColumns, null, null, null, null, null);
         maxIdCursor.moveToNext();
         int nextId = maxIdCursor.getInt(0) + 1;
+        maxIdCursor.close();
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("insert into todos (Title, Description, Id) values ('"+task.getTitle()+"','"+task.getDescription()+"', '"+nextId+"')");
     }

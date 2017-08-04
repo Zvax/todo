@@ -21,10 +21,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_editing"/>
+    <include layout="@layout/content_editing" android:id="@+id/include2" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+    <android.support.design.widget.FloatingActionButton android:id="@+id/action_delete"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin" app:srcCompat="@android:drawable/ic_menu_delete"
+        app:layout_anchor="@+id/include2" app:layout_anchorGravity="top|right"
+        android:layout_gravity="center_vertical|center_horizontal" />
+    <android.support.design.widget.FloatingActionButton android:id="@+id/action_save" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_menu_save" app:layout_anchor="@+id/include2"
+        app:layout_anchorGravity="top|center_horizontal" android:layout_gravity="center_vertical|center_horizontal" />
 
 </android.support.design.widget.CoordinatorLayout>
