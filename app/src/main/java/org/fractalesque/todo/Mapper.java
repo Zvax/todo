@@ -1,11 +1,11 @@
 package org.fractalesque.todo;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 public class Mapper extends SQLiteOpenHelper {
 
@@ -17,25 +17,25 @@ public class Mapper extends SQLiteOpenHelper {
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_PARENT = "Parent";
     private static final String SQL_DELETE_TODOS_TABLE =
-            "DROP TABLE " + TABLE_TODOS;
+        "DROP TABLE " + TABLE_TODOS;
     private static final String SQL_DELETE_TEMP_TABLE =
-            "DROP TABLE " + TABLE_TEMP;
+        "DROP TABLE " + TABLE_TEMP;
     private static final String SQL_BACKUP_DATA_TO_TEMP =
-            "INSERT INTO " + TABLE_TEMP + "(Id, Title, Description) SELECT (Id, Title, Description) FROM " + TABLE_TODOS;
+        "INSERT INTO " + TABLE_TEMP + "(Id, Title, Description) SELECT (Id, Title, Description) FROM " + TABLE_TODOS;
     private static final String SQL_IMPORT_DATA_FROM_TEMP =
-            "INSERT INTO " + TABLE_TODOS + "(Id, Title, Description) SELECT (Id, Title, Description) FROM " + TABLE_TEMP;
+        "INSERT INTO " + TABLE_TODOS + "(Id, Title, Description) SELECT (Id, Title, Description) FROM " + TABLE_TEMP;
     private static final String SQL_CREATE_TODOS_TABLE =
-            "CREATE TABLE " + TABLE_TODOS + " (" +
-                    COLUMN_ID + " INTEGER, " +
-                    COLUMN_PARENT + " INTEGER, " +
-                    COLUMN_TITLE + " TEXT, " +
-                    COLUMN_DESCRIPTION + " TEXT);";
+        "CREATE TABLE " + TABLE_TODOS + " (" +
+            COLUMN_ID + " INTEGER, " +
+            COLUMN_PARENT + " INTEGER, " +
+            COLUMN_TITLE + " TEXT, " +
+            COLUMN_DESCRIPTION + " TEXT);";
     private static final String SQL_CREATE_TEMP_TABLE =
-            "CREATE TABLE " + TABLE_TEMP + " (" +
-                    COLUMN_ID + " INTEGER, " +
-                    COLUMN_PARENT + " INTEGER, " +
-                    COLUMN_TITLE + " TEXT, " +
-                    COLUMN_DESCRIPTION + " TEXT);";
+        "CREATE TABLE " + TABLE_TEMP + " (" +
+            COLUMN_ID + " INTEGER, " +
+            COLUMN_PARENT + " INTEGER, " +
+            COLUMN_TITLE + " TEXT, " +
+            COLUMN_DESCRIPTION + " TEXT);";
 
     private SQLiteDatabase writeDB;
 
@@ -75,10 +75,15 @@ public class Mapper extends SQLiteOpenHelper {
     }
 
     public void update(Task task) {
-        ContentValues values = new ContentValues();
-        values.put("Title", task.getTitle());
-        values.put("Description", task.getDescription());
-        writeDB.update(TABLE_TODOS, values, "Id=" + task.getId(), null);
+        SQLiteStatement stmt = writeDB.compileStatement(
+            "UPDATE " + TABLE_TODOS + " SET " +
+                COLUMN_TITLE + "=?," +
+                COLUMN_DESCRIPTION + "=? " +
+                "WHERE " + COLUMN_ID + "=?");
+        stmt.bindString(1, task.getTitle());
+        stmt.bindString(2, task.getDescription());
+        stmt.bindLong(3, task.getId());
+        stmt.executeUpdateDelete();
     }
 
     public void insert(Task task) {
@@ -88,7 +93,15 @@ public class Mapper extends SQLiteOpenHelper {
         maxIdCursor.moveToNext();
         int nextId = maxIdCursor.getInt(0) + 1;
         maxIdCursor.close();
-        writeDB.execSQL("insert into todos (Title, Description, Id) values ('" + task.getTitle() + "','" + task.getDescription() + "', '" + nextId + "')");
+        SQLiteStatement stmt = writeDB.compileStatement(
+            "INSERT INTO " + TABLE_TODOS + "(" +
+                COLUMN_TITLE + "," + COLUMN_DESCRIPTION + "," + COLUMN_ID +
+                ") VALUES (?,?,?)"
+        );
+        stmt.bindString(1, task.getTitle());
+        stmt.bindString(2, task.getDescription());
+        stmt.bindLong(3, nextId);
+        stmt.executeInsert();
     }
 
     public Task[] getTasks() {
